@@ -1,0 +1,57 @@
+<html id="ng-app" ng-app="myapp" ng-controller="myctrl" >
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="custom.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+<header class="navbar navbar-default navbar-fixed-top" role="banner">
+	<div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+           <a class="navbar-brand" href="#">
+             <img id="brand" src="core_logo_254x114.png"  height="42"> Bid Tool (Pre-alpha)
+           </a>
+        </div>
+     
+        <div class="navbar-collapse collapse" role="navigation" bs-navbar>
+          <ul class="nav navbar-nav">
+          	<li class="divider"></li>
+            <li><a>&nbsp;</a></li>
+            <li><a id="graph" href="#">Graph</a></li>
+            <li><a id="search" href="#/power">PowerSearch</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a class="glyphicon glyphicon-off" id="logout"></a>
+            </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+</header>
+
+<div class="container">
+ 
+ <div data-ng-view id="ng-view"></div>
+
+</div>
+
+	<script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="angular.js"></script>
+    <script type="text/javascript" src="angular-route.js"></script>
+    <script type="text/javascript" src="angular-resource.js"></script>
+	<script type="text/javascript" src="highcharts.js"></script>
+	<script type="text/javascript" src="highcharts-ng.js"></script>
+	<script type="text/javascript" src="parse-resource.js"></script>
+    <script type="text/javascript" src="appService.js"></script>
+	<script type="text/javascript" src="myapp.js"></script>
+	<script type="text/javascript" src="power.js"></script>
+	<script type="text/javascript" src="bootstrap.min.js"></script>
+	<script type="text/javascript" src="ui-boostrap/ui-bootstrap-tpls-0.10.0.js"></script>
+</body>
+</html>

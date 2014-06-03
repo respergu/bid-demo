@@ -1,0 +1,175 @@
+<br/>
+<script type="text/ng-template" id="query.html">
+    <button ng-click="addCondition(q,q)" class="btn add_item" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+    <li class="dropdown" style="list-style-type: none; display: inline-block">
+        <button class="btn dropdown-toggle add_item">( )</button>
+        <ul class="dropdown-menu">
+            <li>
+                <div ng-click="addOrGroup(q,q)" class="menu_item">add group (<b>OR</b>)</div>
+            </li>
+        </ul>
+    </li>
+    <div ng-repeat="node in q.nodes">
+        <div ng-include="'query_node.html'" class=""></div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="query_node.html">
+    <div ng-class="{ 'node_in':node.show, 'node_out':node.hide }">
+    <ng-switch on="node.op.name">
+    <div ng-switch-when="$and" class="indent and_group">
+            <button ng-click="addCondition(q,node)" class="btn add_item" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+            <div ng-repeat="node in node.nodes">
+                <div ng-include="'query_node.html'"></div>
+            </div>
+    </div>
+    <div ng-switch-when="$or" class="indent or_group">
+            <button ng-click="addCondition(q,node)" class="btn add_item" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+            <li class="dropdown" style="list-style-type: none; display: inline-block">
+                <button class="btn dropdown-toggle add_item">( )</button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <div ng-click="addAndGroup(q,node)" class="menu_item" ng-click="">add group (<b>AND</b>)</div>
+                    </li>
+                </ul>
+            </li>
+            <div ng-repeat="node in node.nodes">
+                <div ng-include="'query_node.html'"></div>
+            </div>
+    </div>
+    <div ng-switch-default>
+            <div ng-include="'query_condition.html'"></div>
+        </div>
+    </ng-switch>
+    <div ng-show="$last==false" class="logic">{{ getParentOperator(q,node,1).description }}</div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="query_condition.html">
+	<select  ng-model="node.prop" style="width: 250px">
+            <option ng-repeat="(schemaProperty, type) in q.collection.schema" value="{{ schemaProperty }}">
+                {{ schemaProperty }}
+            </option>
+    </select>
+
+    <select  ng-model="node.booleanMatch" style="width: 110px;" ng-options="operator.name for operator in psBooleanMatches" ></select>
+
+    <select  ng-model="node.op" style="width: 210px;" ng-options="operator.description for operator in psOperators"></select>
+
+    <input type="text" ng-model="node.val" />
+
+    <button ng-click="removeCondition(q, node, 1)" class="btn" type="button"><i class="glyphicon glyphicon-minus"></i></button>
+</script>
+
+<!-- METRICS FILTER -->
+<script type="text/ng-template" id="queryMetric.html">
+    <button ng-click="addMetricCondition(q,q)" class="btn add_item" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+    <li class="dropdown" style="list-style-type: none; display: inline-block">
+        <button class="btn dropdown-toggle add_item">( )</button>
+        <ul class="dropdown-menu">
+            <li>
+                <div ng-click="addOrGroup(q,q)" class="menu_item">add group (<b>OR</b>)</div>
+            </li>
+        </ul>
+    </li>
+    <div ng-repeat="node in q.metricNodes">
+        <div ng-include="'queryMetric_node.html'" class=""></div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="queryMetric_node.html">
+    <div ng-class="{ 'node_in':node.show, 'node_out':node.hide }">
+    <ng-switch on="node.op">
+    <div ng-switch-when="$and" class="indent and_group">
+            <button ng-click="addMetricCondition(q,node)" class="btn add_item" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+            <div ng-repeat="node in node.nodes">
+                <div ng-include="'query_node.html'"></div>
+            </div>
+    </div>
+    <div ng-switch-when="$or" class="indent or_group">
+            <button ng-click="addCondition(q,node)" class="btn add_item" type="button"><i class="icon-plus-sign"></i></button>
+            <li class="dropdown" style="list-style-type: none; display: inline-block">
+                <button class="btn dropdown-toggle add_item">( )</button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <div ng-click="addAndGroup(q,node)" class="menu_item" ng-click="">add group (<b>AND</b>)</div>
+                    </li>
+                </ul>
+            </li>
+            <div ng-repeat="node in node.nodes">
+                <div ng-include="'queryMetric_node.html'"></div>
+            </div>
+    </div>
+    <div ng-switch-default>
+            <div ng-include="'queryMetric_condition.html'"></div>
+        </div>
+    </ng-switch>
+	<div ng-show="$last==false" class="logic">{{ getParentOperator(q,node,2).description }}</div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="queryMetric_condition.html">
+
+	<select  ng-model="node.prop" style="width: 250px;" ng-options="metricProp.propLabel as metricProp.propLabel for metricProp in metricsSchemaInfo" ></select>
+
+    <select  ng-model="node.booleanMatch" style="width: 110px;" ng-options="operator.metricsLabel for operator in psBooleanMatches" ></select>
+
+    <select  ng-model="node.op" style="width: 210px;" ng-options="operator.description for operator in metricOperators"></select>
+
+    <input type="text" ng-model="node.val" />
+
+    <button ng-click="removeCondition(q, node, 2)" class="btn" type="button"><i class="glyphicon glyphicon-minus"></i></button>
+</script>
+
+<!-- METRICS FILTER -->
+
+<div class="query container-fluid">
+    <div class="row-fluid">
+        <div class="span10">
+            <select class="row_item" ng-model="q" ng-options="query as query.className for query in queries"></select>
+            <button ng-click="executePowerQuery(q)" class="btn btn-teal">Search</button><div style="display: inline-block; margin-left: 10px" ng-class="{ animated:true, lightSpeedOut:busy }">{{ status }}</div>
+            <span class="outputDesc">{{ outputFormat.description }}</span>
+        </div>
+    </div>
+    <h3>Attribute Filters</h3>
+    <div class="row-fluid">
+        <div class="span10">
+            <div ng-include="'query.html'"></div>
+        </div>
+    </div>
+    <h3>Metrics Filters</h3>
+    <div class="row-fluid">
+        <div class="span10">
+            <div ng-include="'queryMetric.html'"></div>
+        </div>
+    </div>
+    <div class="row-fluid"></div>
+    <div class="row-fluid"></div>
+    <hr>
+    <hr>
+    <div class="row-fluid">
+    	<table>
+    		<tr>
+				<th>Unique Id</th>
+				<th>Keyword</th>
+				<th>Keyword Type</th>
+				<th>Engine Name</th>
+				<th>Campaign Name</th>
+				<th>Account</th>
+    		</tr>
+    		<tr ng-repeat="keyword in results">
+    			<td>{{keyword.id}}</td>
+    			<td>{{keyword.keyword}}</td>
+    			<td>{{keyword.keywordType}}</td>
+    			<td>{{keyword.engineName}}</td>
+    			<td>{{keyword.campaignName}}</td>
+    			<td>{{keyword.account}}</td>
+    		</tr>
+    	</table>
+    </div>
+    
+    
+</div>
+<!-- 
+q: {{q}}
+ -->

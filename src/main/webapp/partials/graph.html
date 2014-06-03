@@ -1,0 +1,48 @@
+<h1>Graph</h1>
+
+<div class="row">
+            <input ng-model="chartConfig.title.text">
+            <button ng-click="addPast2WeeksCostSerie()">Refresh</button>
+</div>
+
+<div class="row">
+<div class="col-lg-1">
+Date List
+</div>
+<div class="col-lg-2">
+  <select id="dateList" class="form-control"
+          ng-options="d.name for d in dateList"
+          ng-model="graph.dateFilter">
+  </select>
+</div>
+</div>
+
+<div class="row" ng-show="graph.dateFilter.id==6">
+<div class="col-lg-1">
+Ranges
+</div>
+<div class="col-lg-4">
+    <div class="col-md-3" style="padding-left: 0; padding-right: 0;">
+    <input id="dateFrom" type="text" class="form-control" name="start" ng-model="chartRequest.range1FromDate"  placeholder="from" show-weeks="false" datepicker-options="dateOptions" datepicker-popup="MM-dd-yyyy" />
+    </div>
+    <div class="col-md-3" style="padding-left: 0; padding-right: 0;">
+    <input id="dateTo" type="text" class="form-control" name="end" ng-model="chartRequest.range1ToDate" placeholder="to" show-weeks="false" datepicker-options="dateOptions" datepicker-popup="MM-dd-yyyy" />
+    </div>
+</div>
+<div class="col-lg-1">
+     2nd Range<input type="checkbox" ng-model="chartRequest.compareDates"> 
+</div>
+<div class="col-lg-4" ng-show="chartRequest.compareDates" >
+    <div class="col-md-3" style="padding-left: 0; padding-right: 0;">
+    <input id="dateFrom" type="text" class="form-control" name="start" ng-model="chartRequest.range2FromDate"  placeholder="from" show-weeks="false" datepicker-options="dateOptions" datepicker-popup="MM-dd-yyyy" />
+    </div>
+    <div class="col-md-3" style="padding-left: 0; padding-right: 0;">
+    <input id="dateTo" type="text" class="form-control" name="end" ng-model="chartRequest.range2ToDate" placeholder="to" show-weeks="false" datepicker-options="dateOptions" datepicker-popup="MM-dd-yyyy" />
+    </div>
+</div>
+</div>
+
+
+<div class="row">
+            <highchart id="chart1" config="chartConfig"></highchart>
+</div>
